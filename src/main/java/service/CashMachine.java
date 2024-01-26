@@ -1,5 +1,6 @@
-import java.util.HashMap;
-import java.util.Map;
+package service;
+
+import common.ConstantsMessage;
 
 import java.util.*;
 
@@ -12,17 +13,17 @@ public class CashMachine {
 
     public String addNotes(String currency, int value, int number) {
         if (!isValidCurrency(currency) || !isValidValue(value) || number <= 0) {
-            return "ERROR";
+            return ConstantsMessage.ERROR_MESSAGE;
         }
 
         cash.putIfAbsent(currency, new TreeMap<>(Comparator.reverseOrder()));
         cash.get(currency).merge(value, number, Integer::sum);
-        return "OK";
+        return ConstantsMessage.OK_MESSAGE;
     }
 
     public String getCash(String currency, int amount) {
         if (!cash.containsKey(currency) || amount <= 0) {
-            return "ERROR";
+            return ConstantsMessage.ERROR_MESSAGE;
         }
 
         List<String> output = new ArrayList<>();
@@ -47,7 +48,7 @@ public class CashMachine {
                 int count = Integer.parseInt(parts[1]);
                 denominations.put(value, denominations.get(value) + count);
             }
-            return "ERROR";
+            return ConstantsMessage.ERROR_MESSAGE;
         }
 
         return String.join("\n", output) + "\nOK";
@@ -60,7 +61,7 @@ public class CashMachine {
                 output.append(currency).append(" ").append(entry.getKey()).append(" ").append(entry.getValue()).append("\n");
             }
         }
-        return output.append("OK").toString();
+        return output.append(ConstantsMessage.OK_MESSAGE).toString();
     }
 
     private boolean isValidCurrency(String currency) {
